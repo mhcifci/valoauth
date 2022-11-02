@@ -5,12 +5,12 @@ We make mobile application for Valorant FPS game.
 
 
 
-## Roadmap
+## To-DO
 
-- Additional browser support
-
-- Add more integrations
-
+- First GET daily market
+- Checking wallet balance
+- Most items by percent come to the market.
+- Now, working on only EU servers
 
 ## Developers
 
