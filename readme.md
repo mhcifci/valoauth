@@ -7,9 +7,8 @@ We make mobile application for Valorant FPS game.
 
 ## Roadmap
 
-- Additional browser support
-
-- Add more integrations
+- First get daily Market
+- Now, working on only EU servers
 
 
 ## Developers
