@@ -10,21 +10,27 @@ app.listen(PORT, () => {});
 
 // Let authenticate and get UID, ACT, ETT
 app.get("/login", (req, res) => {
+
+    let userData =  [];
     valorantApi.authorize('mahmutcannx', '2146422Mahmut').then(() => {
-        let data = {
+        data = {
             "user_id": valorantApi.user_id,
             "access_token": valorantApi.access_token,
             "entitlements_token": valorantApi.entitlements_token,
         }
-        let response = {
+        userData.push(data);
+        res.status(200).json({
             "status": 200,
             "result": "success",
-            "data": data
-        }
-        res.status(200).json(response);
+            "data": userData
+        });
     }).catch((error) => {
-        console.log(error);
-        res.status(500).json(error);
+        res.status(500).json({
+            "status": 400,
+            "result": "false",
+            "message": "Bad request!",
+            "data"  : error
+        });
     });
 });
 
