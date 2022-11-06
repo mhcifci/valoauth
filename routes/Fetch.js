@@ -36,6 +36,38 @@ router.post("/dailyStore", (req, res) => {
         return false;
     }
 
+
+    let runAsync = async () => {
+        let getInfo = await axios.get(baseUrl + useMethod + userId, {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Riot-Entitlements-JWT': entitlementsToken,
+                'Authorization': 'Bearer ' + accessToken
+            }
+
+        });
+
+        let valorantInfo = getInfo.data.SkinsPanelLayout.SingleItemOffers;
+
+        valorantInfo.forEach(function (item, index) {
+
+            axios.get("https://valorant-api.com/v1/weapons/skinlevels/" + item)
+                .then(function (response) {
+                    data = {
+                        "status": "success",
+                        "data": response,
+                    }
+                    res.status(200).send(data);
+                })
+
+        });
+
+    };
+
+
+    runAsync();
+    return false;
+
     axios.get(baseUrl + useMethod + userId, {
         headers: {
             'Content-Type': 'application/json',
