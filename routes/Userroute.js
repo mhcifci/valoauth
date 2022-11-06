@@ -18,7 +18,7 @@ router.get("/login", (req, res) => {
             "data": userData
         });
     }).catch((error) => {
-        res.status(4).json({
+        res.status(400).json({
             "status": "error",
             "message": "Bad request!",
             "data"  : error
