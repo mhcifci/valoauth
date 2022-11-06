@@ -4,7 +4,7 @@ const  {
     DailyMarketCodes
 } = require('../controllers/Market/DailyMarketCodesController')
 
-// Get JWT token and Access Token
+// Get Daily Market Item Codes
 router.post("/daily", DailyMarketCodes);
 
 module.exports = router;
