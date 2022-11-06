@@ -14,14 +14,12 @@ router.get("/login", (req, res) => {
         }
         userData.push(data);
         res.status(200).json({
-            "status": 200,
-            "result": "success",
+            "status": "success",
             "data": userData
         });
     }).catch((error) => {
-        res.status(500).json({
-            "status": 400,
-            "result": "false",
+        res.status(4).json({
+            "status": "error",
             "message": "Bad request!",
             "data"  : error
         });
