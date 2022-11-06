@@ -49,22 +49,22 @@ router.post("/dailyStore", (req, res) => {
 
         let valorantInfo = getInfo.data.SkinsPanelLayout.SingleItemOffers;
 
+        let skinData = [];
         valorantInfo.forEach(function (item, index) {
-
             axios.get("https://valorant-api.com/v1/weapons/skinlevels/" + item)
                 .then(function (response) {
-                    data = {
-                        "status": "success",
-                        "data": response,
-                    }
-                    res.status(200).send(data);
+                    skinData.append(response.data.toString());
                 })
-
         });
 
+        console.log(skinData);
+        return false; 
+        data = {
+            "status": "success",
+            "data": skinData,
+        }
+        res.status(200).send(data);
     };
-
-
     runAsync();
     return false;
 
