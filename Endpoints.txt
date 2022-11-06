@@ -1,0 +1,4 @@
+# POST # Get for user Riot Session JWT & Access Token
+http://{HOST}/user/login
+
+
