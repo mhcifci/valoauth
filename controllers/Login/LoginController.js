@@ -1,16 +1,27 @@
 const Valorant = require('@liamcottle/valorant.js');
-const valorantApi = new Valorant.API(Valorant.Regions.Europe);
+/*const Regions = {
+    AsiaPacific: 'AP',
+    Europe: 'EU',
+    Korea: 'KO',
+    NorthAmerica: 'NA',
+}*/
+
+// burada regiona göre login olmuyor işimiz çok rahat...
 
 const Login = ((req, res) => {
     const id = req.body.id;
     const password = req.body.password;
+    const region = req.body.region;
 
-    if (!id || !password) {
+    if (!id || !password || !region) {
         res.status(403).json({
             "status": "error",
-            "message": "Please fill your ID and passwordword!"
+            "message": "Please check your post fields"
         });
+        return false;
     }
+  
+    const valorantApi = new Valorant.API();
     valorantApi.authorize(id, password)
     .then(() => {
         data = {
@@ -22,7 +33,7 @@ const Login = ((req, res) => {
             "status": "success",
             "data": data
         })
-    }).catch(() => {
+    }).catch((e) => {
         res.status(403).json({
             "status": "error",
             "message": "User information is incorrect!",

@@ -2,6 +2,7 @@
   "dependencies": {
     "@liamcottle/valorant.js": "^1.5.1",
     "axios": "^1.1.3",
+    "cors": "^2.8.5",
     "express": "^4.18.2",
     "nodeman": "^1.1.2",
     "nodemon": "^2.0.20"
