@@ -7,8 +7,8 @@ const UsernameController = async (req, res) => {
   const entitlementsToken = req.body.entitlements_token;
   const region = req.body.region;
 
-  const baseUrl = "https://pd." + region + ".a.pvp.net/name-service/v2/";
-  const useMethod = "players/";
+  const baseUrl = "https://pd." + region + ".a.pvp.net/";
+  const useMethod = "name-service/v2/players";
 
   if (!userId || !accessToken || !entitlementsToken || !region) {
     res.status(418).json({
@@ -17,16 +17,14 @@ const UsernameController = async (req, res) => {
     });
   }
   await axios
-    .put(baseUrl + useMethod, [
-      "`"+userId+"`"
-      ], {
+    .put(baseUrl + useMethod, [""+userId+""], {
       headers: {
         "Content-Type": "application/json",
         "X-Riot-Entitlements-JWT": entitlementsToken,
         Authorization: "Bearer " + accessToken,
       }
     })
-    .then((result) => {
+    .then((result) => { 
       res.status(200).json({
         status: "success",
         data: result.data
