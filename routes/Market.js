@@ -3,8 +3,8 @@ const router = express.Router();
 const  { 
     DailyMarketCodes
 } = require('../controllers/Market/DailyMarketCodesController')
+const postMiddleware = require("../middlewares/post.middleware");
 
-// Get Daily Market Item Codes
-router.post("/daily", DailyMarketCodes);
+router.post("/daily", postMiddleware, DailyMarketCodes);
 
 module.exports = router;

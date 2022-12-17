@@ -1,12 +1,15 @@
 const axios = require("axios");
-const { restart } = require("nodemon");
+const apiService = require("../../services/api.service");
 
 async function getValorantWeapons(skins, lang = "en-US") {
   if (typeof skins === "object") {
     let skinArr = [];
     for (var i = 0; i < skins.length; i++) {
       let result = await axios.get(
-        "https://valorant-api.com/v1/weapons/skins/" + skins[i].SkinID + "?language="+lang
+        "https://valorant-api.com/v1/weapons/skins/" +
+          skins[i].SkinID +
+          "?language=" +
+          lang
       );
       skinArr.push(result.data.data);
     }
@@ -19,7 +22,10 @@ async function getValorantSprays(skins, lang = "en-US") {
     let skinArr = [];
     for (var i = 0; i < skins.length; i++) {
       let result = await axios.get(
-        "https://valorant-api.com/v1/sprays/" + skins[i].SprayID + "?language="+lang
+        "https://valorant-api.com/v1/sprays/" +
+          skins[i].SprayID +
+          "?language=" +
+          lang
       );
       skinArr.push(result.data.data);
     }
@@ -34,23 +40,14 @@ const InventoryController = async (req, res) => {
   const region = req.body.region;
   const lang = req.body.lang;
 
-  const baseUrl = "https://pd." + region + ".a.pvp.net/";
-  const useMethod = "personalization/v2/players/" + userId + "/playerloadout";
-
-  if (!userId || !accessToken || !entitlementsToken || !region) {
-    res.status(418).json({
-      status: "error",
-      message: "Blap blap cort, isteğini bir kontrol et la!",
-    });
-  }
-  await axios
-    .get(baseUrl + useMethod, {
-      headers: {
-        "Content-Type": "application/json",
-        "X-Riot-Entitlements-JWT": entitlementsToken,
-        Authorization: "Bearer " + accessToken,
-      },
-    })
+  const valorantService = new apiService(
+    region,
+    userId,
+    accessToken,
+    entitlementsToken
+  );
+  valorantService
+    .getPlayerLoadout(userId)
     .then(async (result) => {
       const weapons = [];
       const sprays = [];
@@ -64,16 +61,18 @@ const InventoryController = async (req, res) => {
         status: "success",
         data: {
           weapons: weapons[0],
-          sprays: sprays[0]
-        }
+          sprays: sprays[0],
+        },
       });
     })
     .catch((err) => {
-      console.log(err);
-      res.status(403).json({
-        status: "error",
-        data: err.message,
-      });
+      if (err.toJSON().status == 400) {
+        res.status(400).json({
+          status: "false",
+          code: "refresh_login",
+          message: "Authorization failed, please try login again."
+        });
+      }
     });
 };
 

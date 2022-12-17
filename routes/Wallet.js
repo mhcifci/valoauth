@@ -3,8 +3,7 @@ const router = express.Router();
 const  { 
     UserWalletController
 } = require('../controllers/Wallet/UserWalletController')
+const postMiddleware = require("../middlewares/post.middleware");
 
-// Get Daily Market Item Codes
-router.post("/balance", UserWalletController);
-
+router.post("/balances", postMiddleware, UserWalletController);
 module.exports = router;

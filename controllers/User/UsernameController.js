@@ -1,40 +1,32 @@
-const axios = require("axios");
-const { restart } = require("nodemon");
+const apiService = require("../../services/api.service");
 
 const UsernameController = async (req, res) => {
   const userId = req.body.user_id;
   const accessToken = req.body.access_token;
   const entitlementsToken = req.body.entitlements_token;
   const region = req.body.region;
-
-  const baseUrl = "https://pd." + region + ".a.pvp.net/";
-  const useMethod = "name-service/v2/players";
-
-  if (!userId || !accessToken || !entitlementsToken || !region) {
-    res.status(418).json({
-      status: "error",
-      message: "Blap blap cort, isteğini bir kontrol et la!",
-    });
-  }
-  await axios
-    .put(baseUrl + useMethod, [""+userId+""], {
-      headers: {
-        "Content-Type": "application/json",
-        "X-Riot-Entitlements-JWT": entitlementsToken,
-        Authorization: "Bearer " + accessToken,
-      }
-    })
-    .then((result) => { 
+  const valorantService = new apiService(
+    region,
+    userId,
+    accessToken,
+    entitlementsToken
+  );
+  valorantService
+    .getPlayers(userId)
+    .then((result) => {
       res.status(200).json({
         status: "success",
-        data: result.data
+        data: result.data,
       });
     })
     .catch((err) => {
-      res.status(403).json({
-        status: "error",
-        data: err.message,
-      });
+      if (err.toJSON().status == 400) {
+        res.status(400).json({
+          status: "false",
+          code: "refresh_login",
+          message: "Authorization failed, please try login again.",
+        });
+      }
     });
 };
 

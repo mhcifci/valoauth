@@ -3,8 +3,8 @@ const router = express.Router();
 const  { 
     Login,
 } = require('../controllers/Login/LoginController')
+const loginMiddleware = require("../middlewares/login.middleware");
 
-// Get JWT token and Access Token
-router.post("/login", Login);
+router.post("/login", loginMiddleware, Login);
 
 module.exports = router;
