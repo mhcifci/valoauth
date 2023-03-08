@@ -14,26 +14,48 @@ async function getValorantSkins(skins, lang = "en-US") {
   }
 }
 
+async function findAndGetPrice(items, data) {
+  const valorantService = new apiService(data.region, data.userId, data.accessToken, data.entitlementsToken);
+  let priceArr = [];
+  for (let index = 0; index < items.length; index++) {
+    const getStore = await valorantService.getStoreOfferPrice(data.userId);
+    const find = await getStore.data.Offers.find(x => x.OfferID === items[index].uuid);
+    let result = {
+      item : items[index],
+      price : Object.values(find.Cost).toString()
+    }
+    priceArr.push(result);
+  };
+  return priceArr;
+}
+
+
 const DailyMarketCodes = async (req, res) => {
   const userId = req.body.user_id;
   const accessToken = req.body.access_token;
   const entitlementsToken = req.body.entitlements_token;
   const region = req.body.region;
   const lang = req.body.lang;
-  const valorantService = new apiService(
+  const data = {
     region,
     userId,
     accessToken,
     entitlementsToken
-  );
+  }
+  const valorantService = new apiService(data.region, data.userId, data.accessToken, data.entitlementsToken);
   valorantService.getPlayerStoreFront(userId) 
   .then((result) => {
     const skins = result.data.SkinsPanelLayout.SingleItemOffers;
+
     getValorantSkins(skins, lang).then((result) => {
-      res.status(200).json({
-        status: "success",
-        data: result
+
+      findAndGetPrice(result, data).then((resData) => {
+        res.status(200).json({
+          status: "success",
+          data: resData
+        });
       });
+      return;
     });
   })
   .catch((err) => {

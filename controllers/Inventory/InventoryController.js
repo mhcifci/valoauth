@@ -64,14 +64,17 @@ const InventoryController = async (req, res) => {
           sprays: sprays[0],
         },
       });
+      return;
     })
     .catch((err) => {
+      console.log(err);
       if (err.toJSON().status == 400) {
         res.status(400).json({
           status: "false",
           code: "refresh_login",
           message: "Authorization failed, please try login again."
         });
+        return;
       }
     });
 };

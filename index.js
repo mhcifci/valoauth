@@ -5,7 +5,6 @@ const corsOptions = require('./config/corsOptions');
 const PORT = process.env.PORT || 3000;
 app.use(cors(corsOptions));    
 
-// For access to JWT and Authorization
 const UserRoute  = require("./routes/User");
 const MarketRoute  = require("./routes/Market");
 const WalletRoute  = require("./routes/Wallet");

@@ -57,7 +57,7 @@ class apiService {
   }
 
   getContent() {
-    return axios.get(
+    return axios.get( 
       this.getSharedDataServiceUrl(this.region) + "/content-service/v2/content",
       {
         headers: this.generateRequestHeaders(),
@@ -123,6 +123,19 @@ class apiService {
     );
   } 
 
+
+  // player exp and level
+
+  getPlayerExperience(playerId) {
+    return axios.get(
+      this.getPlayerDataServiceUrl(this.region) + 
+        `/account-xp/v1/players/${playerId}`,
+      {
+        headers: this.generateRequestHeaders(),
+      }
+    );
+  } 
+
   getPlayerMMR(playerId) {
     return axios.get(
       this.getPlayerDataServiceUrl(this.region) + `/mmr/v1/players/${playerId}`,
@@ -181,6 +194,17 @@ class apiService {
       }
     );
   }
+
+  getStoreOfferPrice(){
+    return axios.get(
+      this.getPlayerDataServiceUrl(this.region) +
+        `/store/v1/offers/`,
+      {
+        headers: this.generateRequestHeaders(),
+      }
+    ); 
+  }
+
 
   getPlayers(playerId) {
     return axios.put(

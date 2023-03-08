@@ -73,6 +73,10 @@ class authService {
       throw new Error("auth_failure: username or password is incorrect.");
     }
 
+    if (access_tokens.data?.error === "rate_limited") {
+      throw new Error("rate_limited: please try again later.");
+    }
+
     // update access token
     var tokens = parseTokensFromUrl(access_tokens.data.response.parameters.uri);
     const access_token = tokens.access_token;

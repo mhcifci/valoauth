@@ -13,10 +13,14 @@ const UsernameController = async (req, res) => {
   );
   valorantService
     .getPlayers(userId)
-    .then((result) => {
-      res.status(200).json({
-        status: "success",
-        data: result.data,
+    .then(async(result) => {
+      await valorantService.getPlayerExperience(userId)
+      .then((exp) => {
+        res.status(200).json({
+          status: "success",
+          data: result.data,
+          experience : exp.data.Progress
+        });
       });
     })
     .catch((err) => {
